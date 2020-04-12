@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotEmpty;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +20,7 @@ import java.util.Set;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 public class Library extends EntityDefault{
-    
+
     @NotNull @NotEmpty
     private String name;
 
@@ -37,6 +40,6 @@ public class Library extends EntityDefault{
     @NotNull @NotEmpty
     private String publishers;
 
-    @OneToMany(mappedBy = "game_id", fetch = FetchType.LAZY)
-    private Set<GamePlatforms> platforms;
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.LAZY)
+    private List<GamePlatforms> platforms = new ArrayList<>();
 }

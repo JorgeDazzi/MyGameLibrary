@@ -1,8 +1,9 @@
-package br.dazzi.gamelibrary.service;
+package br.dazzi.gamelibrary.service.implemented;
 
 import br.dazzi.gamelibrary.controller.response.AboutResponse;
 import br.dazzi.gamelibrary.domain.entity.About;
 import br.dazzi.gamelibrary.repository.AboutRepositoryImp;
+import br.dazzi.gamelibrary.service.AboutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Repository
-public class AboutRepositoryImp implements AboutRepository {
+public class AboutRepositoryImp implements AboutRepository{
 
     @PersistenceContext
     private EntityManager entityManager;

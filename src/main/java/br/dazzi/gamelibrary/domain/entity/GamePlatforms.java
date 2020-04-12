@@ -1,14 +1,15 @@
 package br.dazzi.gamelibrary.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -16,13 +17,13 @@ import javax.persistence.*;
 public class GamePlatforms extends EntityDefault{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game_id")
+    @JoinColumn(name = "gameId")
     @JsonIgnore
-    private Library game_id;
+    private Library gameId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "platform_id")
+    @JoinColumn(name = "platformId")
     @JsonIgnore
-    private Platforms platform_id;
+    private Platforms platformId;
 
 }

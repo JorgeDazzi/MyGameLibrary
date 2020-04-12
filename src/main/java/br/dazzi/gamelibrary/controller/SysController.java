@@ -1,7 +1,7 @@
 package br.dazzi.gamelibrary.controller;
 
 import br.dazzi.gamelibrary.controller.response.AboutResponse;
-import br.dazzi.gamelibrary.service.AboutServiceImp;
+import br.dazzi.gamelibrary.service.implemented.AboutServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
