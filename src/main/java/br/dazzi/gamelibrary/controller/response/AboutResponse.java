@@ -14,8 +14,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AboutResponse {
 
-    private Long id;
-
     @JsonProperty(value = "version_num")
     @Getter
     private String versionNum;
