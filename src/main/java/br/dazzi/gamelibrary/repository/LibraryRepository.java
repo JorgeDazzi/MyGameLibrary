@@ -1,7 +1,7 @@
 package br.dazzi.gamelibrary.repository;
 
-import br.dazzi.gamelibrary.domain.entity.Library;
+import br.dazzi.gamelibrary.domain.entity.Games;
 
-public interface LibraryRepository extends Repository<Library> {
+public interface LibraryRepository extends Repository<Games> {
 
 }

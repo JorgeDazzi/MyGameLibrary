@@ -1,7 +1,9 @@
 package br.dazzi.gamelibrary.service.implemented;
 
 import br.dazzi.gamelibrary.controller.response.LibraryResponse;
-import br.dazzi.gamelibrary.domain.entity.Library;
+import br.dazzi.gamelibrary.domain.entity.GamePlatforms;
+import br.dazzi.gamelibrary.domain.entity.Games;
+import br.dazzi.gamelibrary.domain.exception.NotFoundException;
 import br.dazzi.gamelibrary.repository.LibraryRepository;
 import br.dazzi.gamelibrary.repository.PlatformsRepository;
 import br.dazzi.gamelibrary.repository.jpql.GamePlatformsRepositoryJpql;
@@ -9,7 +11,6 @@ import br.dazzi.gamelibrary.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,10 +21,10 @@ public class LibraryServiceImp implements LibraryService {
     LibraryRepository libraryRepository;
 
     @Autowired
-    PlatformsRepository platformsRepository;
+    GamePlatformsRepositoryJpql gamePlatformsRepositoryJpql;
 
     @Autowired
-    GamePlatformsRepositoryJpql gamePlatformsRepositoryJpql;
+    PlatformsRepository platformsRepository;
 
     @Override
     public Set<LibraryResponse> getAll() {
@@ -31,15 +32,6 @@ public class LibraryServiceImp implements LibraryService {
         Set<LibraryResponse> result = new HashSet<>();
 
         libraryRepository.findAll().forEach(g -> {
-            HashMap<String,Boolean> platforms = new HashMap<>();
-
-            platformsRepository.findAll().forEach( p -> {
-                platforms.put(
-                        p.getPlatform(),
-                        gamePlatformsRepositoryJpql.isThisPlatformSupported(g.getId(), p.getId())
-                );
-            });
-
             result.add(
               new LibraryResponse(
                     g.getId(),
@@ -51,30 +43,67 @@ public class LibraryServiceImp implements LibraryService {
                     g.getWebsite(),
                     g.getDev(),
                     g.getPublishers(),
-                    platforms
-                )
+                    this.gamePlatformsRepositoryJpql.gamePlatformSupported( g.getId() )
+              )
             );
         });
         return result;
     }
 
     @Override
-    public Library find(Long id) {
-        return null;
+    public LibraryResponse find(Long id) {
+        Games lib = libraryRepository.find(id);
+
+        if(lib == null){
+            throw new NotFoundException("The Game was not found");
+        }
+
+        return new LibraryResponse(
+                lib.getId(),
+                lib.getName(),
+                lib.getSteamAppId(),
+                lib.getRequired_age(),
+                lib.isFree(),
+                lib.getDesc(),
+                lib.getWebsite(),
+                lib.getDev(),
+                lib.getPublishers(),
+                this.gamePlatformsRepositoryJpql.gamePlatformSupported( lib.getId() )
+        );
     }
 
     @Override
-    public void update(Library lib) {
+    public void update(Games lib) {
 
     }
 
     @Override
-    public void remove(Library lib) {
+    public void remove(Games lib) {
 
     }
 
     @Override
-    public Library add(Library lib) {
-        return null;
+    public Games add(LibraryResponse lib) {
+
+        Games games = new Games(
+                lib.getName(),
+                lib.getSteamAppId(),
+                lib.getRequired_age(),
+                lib.isFree(),
+                lib.getDesc(),
+                lib.getWebsite(),
+                lib.getDev(),
+                lib.getPublishers(),
+                null
+        );
+        libraryRepository.add(games);
+
+        platformsRepository.findAll().forEach(p -> {
+            if(lib.getPlatforms().get(p.getPlatform())){
+                gamePlatformsRepositoryJpql.add(new GamePlatforms(games, p));
+            }
+        } );
+
+        return games;
     }
 }

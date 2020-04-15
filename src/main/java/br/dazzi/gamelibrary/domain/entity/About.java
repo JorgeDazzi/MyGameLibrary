@@ -8,7 +8,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Data
-@Entity(name = "api_about") @Table(name = "api_about")
+@Entity(name = "About")
 public class About extends EntityDefault{
 
     @Column(name = "version_num",length = 10)

@@ -1,7 +1,7 @@
 package br.dazzi.gamelibrary.service;
 
 import br.dazzi.gamelibrary.controller.response.LibraryResponse;
-import br.dazzi.gamelibrary.domain.entity.Library;
+import br.dazzi.gamelibrary.domain.entity.Games;
 
 import java.util.Set;
 
@@ -10,11 +10,11 @@ public interface LibraryService {
 
     public Set<LibraryResponse> getAll();
 
-    public Library find(Long id);
+    public LibraryResponse find(Long id);
 
-    public void update(Library lib);
+    public void update(Games lib);
 
-    public void remove(Library lib);
+    public void remove(Games lib);
 
-    public Library add(Library lib);
+    public Games add(LibraryResponse lib);
 }

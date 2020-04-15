@@ -1,11 +1,12 @@
 package br.dazzi.gamelibrary.repository.jpql;
 
-import br.dazzi.gamelibrary.domain.entity.Library;
+import br.dazzi.gamelibrary.domain.entity.Games;
 import br.dazzi.gamelibrary.repository.LibraryRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Repository
@@ -15,29 +16,31 @@ public class LibraryRepositoryJpql implements LibraryRepository {
     EntityManager entityManager;
 
     @Override
-    public Library add(Library entity) {
-        return null;
+    @Transactional
+    public Games add(Games entity) {
+        entityManager.persist(entity);
+        return entity;
     }
 
     @Override
-    public void update(Library entity) {
+    public void update(Games entity) {
 
     }
 
     @Override
-    public void remove(Library entity) {
+    public void remove(Games entity) {
 
     }
 
     @Override
-    public Library find(Long id) {
-        return entityManager.find(Library.class, id);
+    public Games find(Long id) {
+        return entityManager.find(Games.class, id);
     }
 
     @Override
-    public Set<Library> findAll() {
+    public Set<Games> findAll() {
         return Set.copyOf(
-                entityManager.createQuery("select l from Library l where 1=1", Library.class)
+                entityManager.createQuery("select l from Games l where 1=1", Games.class)
                         .getResultList()
         );
     }

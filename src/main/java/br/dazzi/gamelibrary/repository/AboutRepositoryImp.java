@@ -14,7 +14,7 @@ public class AboutRepositoryImp implements AboutRepository{
 
     public About getAbout(){
         return entityManager
-                .createQuery("SELECT a FROM api_about a where 1=1 order by a.id desc", About.class)
+                .createQuery("SELECT a FROM About a where 1=1 order by a.id desc", About.class)
                 .setMaxResults(1)
                 .getSingleResult();
     }

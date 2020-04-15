@@ -2,11 +2,10 @@ package br.dazzi.gamelibrary.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Setter
 @Getter
@@ -17,9 +16,10 @@ import javax.persistence.ManyToOne;
 public class GamePlatforms extends EntityDefault{
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "gameId")
     @JsonIgnore
-    private Library gameId;
+    private Games gameId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "platformId")

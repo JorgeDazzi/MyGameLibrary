@@ -2,11 +2,13 @@ package br.dazzi.gamelibrary.repository.jpql;
 
 import br.dazzi.gamelibrary.domain.entity.GamePlatforms;
 import br.dazzi.gamelibrary.repository.GamePlatformsRepository;
+import br.dazzi.gamelibrary.repository.PlatformsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -16,10 +18,15 @@ public class GamePlatformsRepositoryJpql implements GamePlatformsRepository {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Autowired
+    PlatformsRepository platformsRepository;
+
 
     @Override
+    @Transactional
     public GamePlatforms add(GamePlatforms entity) {
-        return null;
+        entityManager.persist(entity);
+        return entity;
     }
 
     @Override
@@ -56,14 +63,16 @@ public class GamePlatformsRepositoryJpql implements GamePlatformsRepository {
     }
 
     public HashMap<String, Boolean> gamePlatformSupported(Long gameId){
-        /*
-            select
-                p.platform,
-                casewhen((select count(1) from GAME_PLATFORMS g where g.game_id = 1 and g.platform_id = p.id)> 0, true, false)
-            from PLATFORMS p where 1=1
-         */
-        //Set<Platforms> platforms
 
-        return null;
+        HashMap<String,Boolean> platforms = new HashMap<>();
+
+        platformsRepository.findAll().forEach(p -> {
+            platforms.put(
+                    p.getPlatform(),
+                    this.isThisPlatformSupported(gameId, p.getId())
+            );
+        });
+
+        return platforms;
     }
 }

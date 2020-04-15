@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
-public class Library extends EntityDefault{
+public class Games extends EntityDefault{
 
     @NotNull @NotEmpty
     private String name;
@@ -40,6 +38,6 @@ public class Library extends EntityDefault{
     @NotNull @NotEmpty
     private String publishers;
 
-    @OneToMany(mappedBy = "gameId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<GamePlatforms> platforms = new ArrayList<>();
 }
