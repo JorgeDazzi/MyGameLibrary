@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public abstract class APIException extends RuntimeException{
-
-    private String code;
+    private int code;
+    private String description;
     private String message;
 }

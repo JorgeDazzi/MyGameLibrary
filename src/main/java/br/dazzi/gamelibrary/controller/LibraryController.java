@@ -43,9 +43,9 @@ public class LibraryController {
     }
 
     @DeleteMapping(path = "/{id}" )
-    public @ResponseBody ResponseEntity remove(@PathVariable Long id){
+    public @ResponseBody ResponseEntity<Object> remove(@PathVariable Long id){
         libraryServiceImp.remove(id);
-        return new ResponseEntity(null, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
 

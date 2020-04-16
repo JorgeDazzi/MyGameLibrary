@@ -78,6 +78,9 @@ public class LibraryServiceImp implements LibraryService {
     @Override
     public void remove(Long id) {
         Games game = libraryRepository.find(id);
+        if(game == null){
+            throw new NotFoundException("Game Not found or already gone");
+        }
         libraryRepository.remove(game);
     }
 
