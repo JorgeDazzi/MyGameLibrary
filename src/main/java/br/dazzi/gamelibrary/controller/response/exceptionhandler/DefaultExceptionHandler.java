@@ -20,6 +20,8 @@ public class DefaultExceptionHandler {
 
     Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
 
+    //This going to handle any Exception which was not predicted
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleError(Exception exception, HttpServletRequest request){
         logger.error("Unknown error", exception);
         return getDefaultResponseMessage(request);
