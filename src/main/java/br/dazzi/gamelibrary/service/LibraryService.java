@@ -14,7 +14,7 @@ public interface LibraryService {
 
     public void update(Games lib);
 
-    public void remove(Games lib);
+    public void remove(Long lib);
 
     public Games add(LibraryResponse lib);
 }

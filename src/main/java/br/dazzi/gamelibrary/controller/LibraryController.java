@@ -42,5 +42,11 @@ public class LibraryController {
         return new ResponseEntity<>(libraryServiceImp.find(games.getId()), HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{id}" )
+    public @ResponseBody ResponseEntity remove(@PathVariable Long id){
+        libraryServiceImp.remove(id);
+        return new ResponseEntity(null, HttpStatus.NO_CONTENT);
+    }
+
 
 }

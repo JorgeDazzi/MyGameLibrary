@@ -28,8 +28,9 @@ public class LibraryRepositoryJpql implements LibraryRepository {
     }
 
     @Override
+    @Transactional
     public void remove(Games entity) {
-
+        entityManager.remove(entity);
     }
 
     @Override

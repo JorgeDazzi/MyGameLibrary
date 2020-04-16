@@ -31,22 +31,20 @@ public class LibraryServiceImp implements LibraryService {
 
         Set<LibraryResponse> result = new HashSet<>();
 
-        libraryRepository.findAll().forEach(g -> {
-            result.add(
-              new LibraryResponse(
-                    g.getId(),
-                    g.getName(),
-                    g.getSteamAppId(),
-                    g.getRequired_age(),
-                    g.isFree(),
-                    g.getDesc(),
-                    g.getWebsite(),
-                    g.getDev(),
-                    g.getPublishers(),
-                    this.gamePlatformsRepositoryJpql.gamePlatformSupported( g.getId() )
-              )
-            );
-        });
+        libraryRepository.findAll().forEach(g -> result.add(
+          new LibraryResponse(
+                g.getId(),
+                g.getName(),
+                g.getSteamAppId(),
+                g.getRequired_age(),
+                g.isFree(),
+                g.getDesc(),
+                g.getWebsite(),
+                g.getDev(),
+                g.getPublishers(),
+                this.gamePlatformsRepositoryJpql.gamePlatformSupported( g.getId() )
+          )
+        ));
         return result;
     }
 
@@ -78,8 +76,9 @@ public class LibraryServiceImp implements LibraryService {
     }
 
     @Override
-    public void remove(Games lib) {
-
+    public void remove(Long id) {
+        Games game = libraryRepository.find(id);
+        libraryRepository.remove(game);
     }
 
     @Override
