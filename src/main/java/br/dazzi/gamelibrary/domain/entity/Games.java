@@ -22,6 +22,7 @@ public class Games extends EntityDefault{
     @NotNull @NotEmpty
     private String name;
 
+    @Column(unique = true)
     private Long steamAppId;
 
     private int required_age;

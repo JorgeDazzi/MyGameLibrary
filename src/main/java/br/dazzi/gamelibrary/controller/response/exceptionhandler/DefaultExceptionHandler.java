@@ -9,11 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class DefaultExceptionHandler {
@@ -30,6 +33,23 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException notFoundException, HttpServletRequest request) {
         return buildErrorResponse(notFoundException, HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleSpringValidation(MethodArgumentNotValidException methodArgumentNotValidException, HttpServletRequest request) {
+
+        Set<ErrorMessage> msgs = methodArgumentNotValidException
+                .getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(
+                        error -> new ErrorMessage(422, "", error.getDefaultMessage())
+                ).collect(Collectors.toSet());
+
+        return new ResponseEntity<>(
+                new ErrorResponse(msgs.stream().collect(Collectors.toList())),
+                HttpStatus.UNPROCESSABLE_ENTITY
+        );
     }
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(APIException exception, HttpStatus httpStatus, HttpServletRequest request) {
