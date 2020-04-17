@@ -5,7 +5,6 @@ import br.dazzi.gamelibrary.controller.response.error.ErrorMessage;
 import br.dazzi.gamelibrary.controller.response.error.ErrorResponse;
 import br.dazzi.gamelibrary.domain.exception.APIException;
 import br.dazzi.gamelibrary.domain.exception.NotFoundException;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +26,7 @@ public class DefaultExceptionHandler {
 
     //This going to handle any Exception which was not predicted
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleError(Exception exception, HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> handleError(Exception exception, HttpServletRequest request) {
         logger.error("Unknown error", exception);
         return getDefaultResponseMessage(request);
     }
@@ -46,11 +44,15 @@ public class DefaultExceptionHandler {
                 .getAllErrors()
                 .stream()
                 .map(
-                        error -> new ErrorMessage(422, "", error.getDefaultMessage())
+                        error -> new ErrorMessage(
+                                HttpStatus.BAD_REQUEST.value(),
+                                HttpStatus.BAD_REQUEST.name(),
+                                error.getDefaultMessage()
+                        )
                 ).collect(Collectors.toSet());
 
         return new ResponseEntity<>(
-                new ErrorResponse(msgs.stream().collect(Collectors.toList())),
+                new ErrorResponse(msgs),
                 HttpStatus.UNPROCESSABLE_ENTITY
         );
     }
@@ -58,8 +60,12 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleSpringKeys(DataIntegrityViolationException exception, HttpServletRequest request) {
 
-        String field[] = exception.getMostSpecificCause().getLocalizedMessage().split("\"");
-        List<ErrorMessage> msgs =  List.of(new ErrorMessage(422, "UNPROCESSABLE_ENTITY", field.length > 1 ? field[1] : exception.getLocalizedMessage()) );
+        String[] field = exception.getMostSpecificCause().getLocalizedMessage().split("\"");
+        List<ErrorMessage> msgs = List.of(new ErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.name(),
+                field.length > 1 ? field[1] : exception.getLocalizedMessage())
+        );
 
         return new ResponseEntity<>(
                 new ErrorResponse(msgs),
