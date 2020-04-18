@@ -1,20 +1,21 @@
 package br.dazzi.gamelibrary.service;
 
 import br.dazzi.gamelibrary.controller.response.LibraryResponse;
+import br.dazzi.gamelibrary.domain.entity.GamePlatforms;
 import br.dazzi.gamelibrary.domain.entity.Games;
 
 import java.util.Set;
 
 
-public interface LibraryService {
+public interface GamePlatformsService {
 
     public Set<LibraryResponse> getAll();
 
     public LibraryResponse find(Long id);
 
-    public void update(LibraryResponse lib);
+    public void update(GamePlatforms gamePlatforms);
 
-    public void remove(Long lib);
+    public void remove(Long gamePlatforms);
 
-    public Games add(LibraryResponse lib);
+    public Games add(GamePlatforms gamePlatforms);
 }

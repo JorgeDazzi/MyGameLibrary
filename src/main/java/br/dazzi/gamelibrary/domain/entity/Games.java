@@ -1,14 +1,12 @@
 package br.dazzi.gamelibrary.domain.entity;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Games extends EntityDefault{
 
-    @NotNull @NotEmpty
+    @NotBlank
     private String name;
 
     @Column(unique = true)
@@ -33,12 +31,25 @@ public class Games extends EntityDefault{
 
     private String website;
 
-    @NotNull @NotEmpty
+    @NotBlank
     private String dev;
 
-    @NotNull @NotEmpty
+    @NotBlank
     private String publishers;
 
-    @OneToMany(mappedBy = "gameId", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "gameId", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<GamePlatforms> platforms = new ArrayList<>();
+
+    public Games(Long id,@NotBlank String name, Long steamAppId, int required_age, boolean free, String desc, String website, @NotBlank String dev, @NotBlank String publishers, List<GamePlatforms> platforms) {
+        this.name = name;
+        this.steamAppId = steamAppId;
+        this.required_age = required_age;
+        this.free = free;
+        this.desc = desc;
+        this.website = website;
+        this.dev = dev;
+        this.publishers = publishers;
+        this.platforms = platforms;
+        this.setId(id);
+    }
 }

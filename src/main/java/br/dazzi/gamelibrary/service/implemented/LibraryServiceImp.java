@@ -1,16 +1,20 @@
 package br.dazzi.gamelibrary.service.implemented;
 
 import br.dazzi.gamelibrary.controller.response.LibraryResponse;
+import br.dazzi.gamelibrary.controller.response.converter.GameConverter;
 import br.dazzi.gamelibrary.domain.entity.GamePlatforms;
 import br.dazzi.gamelibrary.domain.entity.Games;
+import br.dazzi.gamelibrary.domain.entity.Platforms;
 import br.dazzi.gamelibrary.domain.exception.NotFoundException;
 import br.dazzi.gamelibrary.repository.LibraryRepository;
-import br.dazzi.gamelibrary.repository.PlatformsRepository;
 import br.dazzi.gamelibrary.repository.jpql.GamePlatformsRepositoryJpql;
+import br.dazzi.gamelibrary.repository.jpql.PlatformsRepositoryJpql;
 import br.dazzi.gamelibrary.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +28,7 @@ public class LibraryServiceImp implements LibraryService {
     GamePlatformsRepositoryJpql gamePlatformsRepositoryJpql;
 
     @Autowired
-    PlatformsRepository platformsRepository;
+    PlatformsRepositoryJpql platformsRepositoryJpql;
 
     @Override
     public Set<LibraryResponse> getAll() {
@@ -71,15 +75,16 @@ public class LibraryServiceImp implements LibraryService {
     }
 
     @Override
-    public void update(Games lib) {
-
+    public void update(LibraryResponse lib) {
+        libraryRepository.update(GameConverter.converterToGame(lib, new ArrayList(platformsRepositoryJpql.findAll())));
+        this.gamePlatformsRevalidation(libraryRepository.find(lib.getId()), lib.getPlatforms());
     }
 
     @Override
     public void remove(Long id) {
         Games game = libraryRepository.find(id);
         if(game == null){
-            throw new NotFoundException("Game Not found or already gone");
+            throw new NotFoundException("Game not found or already gone");
         }
         libraryRepository.remove(game);
     }
@@ -100,12 +105,30 @@ public class LibraryServiceImp implements LibraryService {
         );
         libraryRepository.add(games);
 
-        platformsRepository.findAll().forEach(p -> {
+        platformsRepositoryJpql.findAll().forEach(p -> {
             if(lib.getPlatforms().get(p.getPlatform())){
                 gamePlatformsRepositoryJpql.add(new GamePlatforms(games, p));
             }
         } );
 
         return games;
+    }
+
+    public void gamePlatformsRevalidation(Games game, HashMap<String, Boolean> platformsJson){
+        platformsJson.forEach((platform, value)->{
+            Platforms platformEntity = platformsRepositoryJpql.findByPlatform(platform);
+            if(value){
+                if(!gamePlatformsRepositoryJpql
+                        .isThisPlatformSupported(
+                                game.getId(),
+                                platformEntity.getId()
+                        )
+                ){
+                    gamePlatformsRepositoryJpql.add(new GamePlatforms(game, platformEntity));
+                }
+            }else{
+                gamePlatformsRepositoryJpql.remove(platformEntity, game);
+            }
+        });
     }
 }

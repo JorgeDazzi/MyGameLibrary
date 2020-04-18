@@ -48,5 +48,11 @@ public class LibraryController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ResponseEntity<Object> update(@RequestBody @Validated LibraryResponse libraryResponse){
+        libraryServiceImp.update(libraryResponse);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
 
 }

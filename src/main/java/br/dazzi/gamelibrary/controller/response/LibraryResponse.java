@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Lob;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
 
 @Setter
@@ -18,8 +17,7 @@ public class LibraryResponse {
 
     private Long id;
 
-    @NotNull(message = "Game.name field cannot be empty")
-    @NotEmpty(message = "Game.name field cannot be empty")
+    @NotBlank(message = "Game.name field cannot be empty")
     private String name;
 
     private Long steamAppId;
@@ -33,12 +31,10 @@ public class LibraryResponse {
 
     private String website;
 
-    @NotNull(message = "Game.dev field cannot be empty")
-    @NotEmpty(message = "Game.dev field cannot be empty")
+    @NotBlank(message = "Game.dev field cannot be empty")
     private String dev;
 
-    @NotNull(message = "Game.publishers field cannot be empty")
-    @NotEmpty(message = "Game.publishers field cannot be empty")
+    @NotBlank(message = "Game.publishers field cannot be empty")
     private String publishers;
 
     private HashMap<String, Boolean> platforms;

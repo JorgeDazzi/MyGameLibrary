@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Repository
@@ -16,18 +17,22 @@ public class PlatformsRepositoryJpql implements PlatformsRepository {
 
 
     @Override
+    @Transactional
     public Platforms add(Platforms entity) {
-        return null;
+        entityManager.persist(entity);
+        return entity;
     }
 
     @Override
+    @Transactional
     public void update(Platforms entity) {
-
+        entityManager.merge(entity);
     }
 
     @Override
+    @Transactional
     public void remove(Platforms entity) {
-
+        entityManager.remove(entity);
     }
 
     @Override
@@ -41,5 +46,11 @@ public class PlatformsRepositoryJpql implements PlatformsRepository {
                 entityManager.createQuery("select p from Platforms p where 1=1", Platforms.class)
                         .getResultList()
         );
+    }
+
+    public Platforms findByPlatform(String platform) {
+        return entityManager.createQuery("select p from Platforms p where p.platform = :platform", Platforms.class)
+                        .setParameter("platform", platform)
+                        .getSingleResult();
     }
 }
