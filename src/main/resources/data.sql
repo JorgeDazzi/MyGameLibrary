@@ -73,15 +73,16 @@ CREATE TABLE IF NOT EXISTS `Game_Platforms` (
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00001', 'Xögun I');
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00013', 'Xögun II');
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00026', 'Xögun III');
+INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00026', 'Xögun III');
 
 
 -- -----------------------------------------------------
 -- Data for table `Games`
 -- -----------------------------------------------------
 
-INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Dota 2', 570, 0, true, 'pew pew pew', 'www.dota2.com', 'Valve', 'Valve');
-INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Counter Strike GO', 730, 0, true, 'ratatatatata boom', 'www.csgo.com', 'Valve', 'Valve');
-INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Monster Hunter', 1450, 0, false, 'muuuuuu', 'www.capcom.com/monsterhunter', 'Capcom', 'Capcom');
+--INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Dota 2', 570, 0, true, 'pew pew pew', 'www.dota2.com', 'Valve', 'Valve');
+--INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Counter Strike GO', 730, 0, true, 'ratatatatata boom', 'www.csgo.com', 'Valve', 'Valve');
+--INSERT INTO `Games` ( `name`, `steam_app_id`, `required_age`, `free`, `desc`, `website`, `dev`, `publishers`) VALUES ( 'Monster Hunter', 1450, 0, false, 'muuuuuu', 'www.capcom.com/monsterhunter', 'Capcom', 'Capcom');
 
 
 -- -----------------------------------------------------
@@ -98,18 +99,18 @@ INSERT INTO `Platforms` ( `platform`) VALUES ( 'linux');
 -- Data for table `GamePlatforms`
 -- -----------------------------------------------------
 
- INSERT into GAME_PLATFORMS (platform_id, game_id) values
-((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 570)),
-((select p.id from Platforms p where p.platform = 'mac'), (select g.id from Games g where g.steam_app_id = 570));
-
-
- INSERT into GAME_PLATFORMS (platform_id, game_id) values
-((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 730)),
-((select p.id from Platforms p where p.platform = 'mac'), (select g.id from Games g where g.steam_app_id = 730)),
-((select p.id from Platforms p where p.platform = 'linux'), (select g.id from Games g where g.steam_app_id = 730));
-
- INSERT into GAME_PLATFORMS (platform_id, game_id) values
-((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 1450));
+-- INSERT into GAME_PLATFORMS (platform_id, game_id) values
+--((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 570)),
+--((select p.id from Platforms p where p.platform = 'mac'), (select g.id from Games g where g.steam_app_id = 570));
+--
+--
+-- INSERT into GAME_PLATFORMS (platform_id, game_id) values
+--((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 730)),
+--((select p.id from Platforms p where p.platform = 'mac'), (select g.id from Games g where g.steam_app_id = 730)),
+--((select p.id from Platforms p where p.platform = 'linux'), (select g.id from Games g where g.steam_app_id = 730));
+--
+-- INSERT into GAME_PLATFORMS (platform_id, game_id) values
+--((select p.id from Platforms p where p.platform = 'windows'), (select g.id from Games g where g.steam_app_id = 1450));
 
 -- -----------------------------------------------------
 -- Perhaps it might be a View one day...
