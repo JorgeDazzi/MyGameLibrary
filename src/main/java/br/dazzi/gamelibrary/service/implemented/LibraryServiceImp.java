@@ -77,7 +77,7 @@ public class LibraryServiceImp implements LibraryService {
     @Override
     public void update(LibraryResponse lib) {
         libraryRepository.update(GameConverter.converterToGame(lib, new ArrayList(platformsRepositoryJpql.findAll())));
-        this.gamePlatformsRevalidation(libraryRepository.find(lib.getId()), lib.getPlatforms());
+        this.rebuildGameVsPlatforms(libraryRepository.find(lib.getId()), lib.getPlatforms());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class LibraryServiceImp implements LibraryService {
         return games;
     }
 
-    public void gamePlatformsRevalidation(Games game, HashMap<String, Boolean> platformsJson){
+    public void rebuildGameVsPlatforms(Games game, HashMap<String, Boolean> platformsJson){
         platformsJson.forEach((platform, value)->{
             Platforms platformEntity = platformsRepositoryJpql.findByPlatform(platform);
             if(value){
