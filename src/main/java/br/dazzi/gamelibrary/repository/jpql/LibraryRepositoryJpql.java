@@ -25,6 +25,7 @@ public class LibraryRepositoryJpql implements LibraryRepository {
     @Override
     @Transactional
     public void update(Games entity) {
+
         entityManager.merge(entity);
     }
 

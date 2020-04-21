@@ -13,10 +13,7 @@ import br.dazzi.gamelibrary.service.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class LibraryServiceImp implements LibraryService {
@@ -76,7 +73,17 @@ public class LibraryServiceImp implements LibraryService {
 
     @Override
     public void update(LibraryResponse lib) {
-        libraryRepository.update(GameConverter.converterToGame(lib, new ArrayList(platformsRepositoryJpql.findAll())));
+        Games game = libraryRepository.find(lib.getId());
+        if(game == null){
+            throw new NotFoundException("Game was not found");
+        }
+
+        libraryRepository.update(
+                GameConverter.converterToGame(
+                        lib,
+                        List.copyOf(platformsRepositoryJpql.findAll())
+                )
+        );
         this.rebuildGameVsPlatforms(libraryRepository.find(lib.getId()), lib.getPlatforms());
     }
 
@@ -84,7 +91,7 @@ public class LibraryServiceImp implements LibraryService {
     public void remove(Long id) {
         Games game = libraryRepository.find(id);
         if(game == null){
-            throw new NotFoundException("Game not found or already gone");
+            throw new NotFoundException("Game was not found or already gone");
         }
         libraryRepository.remove(game);
     }
@@ -115,20 +122,22 @@ public class LibraryServiceImp implements LibraryService {
     }
 
     public void rebuildGameVsPlatforms(Games game, HashMap<String, Boolean> platformsJson){
-        platformsJson.forEach((platform, value)->{
-            Platforms platformEntity = platformsRepositoryJpql.findByPlatform(platform);
-            if(value){
-                if(!gamePlatformsRepositoryJpql
-                        .isThisPlatformSupported(
-                                game.getId(),
-                                platformEntity.getId()
-                        )
-                ){
-                    gamePlatformsRepositoryJpql.add(new GamePlatforms(game, platformEntity));
+        if(platformsJson != null) {
+            platformsJson.forEach((platform, value) -> {
+                Platforms platformEntity = platformsRepositoryJpql.findByPlatform(platform);
+                if (value) {
+                    if (!gamePlatformsRepositoryJpql
+                            .isThisPlatformSupported(
+                                    game.getId(),
+                                    platformEntity.getId()
+                            )
+                    ) {
+                        gamePlatformsRepositoryJpql.add(new GamePlatforms(game, platformEntity));
+                    }
+                } else {
+                    gamePlatformsRepositoryJpql.remove(platformEntity, game);
                 }
-            }else{
-                gamePlatformsRepositoryJpql.remove(platformEntity, game);
-            }
-        });
+            });
+        }
     }
 }
