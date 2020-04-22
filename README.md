@@ -5,6 +5,11 @@ In Additional, learning new Technologies / Libraries / Designs Patterns as Docke
 ### Prerequisite
 [x] Docker is required for this project.
 
+### Installation
+Execute the Docker-Compose Up in the terminal:
+```
+docker-compose up
+```
 
 
 
