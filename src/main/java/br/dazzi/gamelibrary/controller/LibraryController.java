@@ -51,7 +51,7 @@ public class LibraryController {
     @PutMapping(path = "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<Object> update(@RequestBody @Validated LibraryResponse libraryResponse){
         libraryServiceImp.update(libraryResponse);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
     }
 
 

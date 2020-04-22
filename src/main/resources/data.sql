@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `Game_Platforms` (
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00001', 'Xögun I');
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00013', 'Xögun II');
 INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00026', 'Xögun III');
-INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00026', 'Xögun III');
+INSERT INTO `About` ( `version_num`, `version_name`) VALUES ( '00028', 'Xögun IV');
 
 
 -- -----------------------------------------------------
