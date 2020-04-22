@@ -1,0 +1,15 @@
+version: "2.4"
+services:
+  gamelibrary_application:
+    build:
+      context: ./
+      dockerfile: ./Docker/Dockerfile
+    container_name: GameLibrary
+    restart: on-failure
+    ports:
+      - 8080:8080
+    networks:
+      - gamelibrary_network
+
+networks:
+  gamelibrary_network:
